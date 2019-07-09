@@ -10,32 +10,84 @@ class fileUpload extends Component {
   }
 
   fileSelectedHandler = (event) => {
-    event.preventDefault();
-    if (this.state.selectedFiles !== event.target.file) {
+    // event.preventDefault();
+    console.log('fileSelectedHandler');
+    console.log(event.target.files[0]);
+    if (this.state.selectedFiles !== event.target.files) {
       this.setState({
         selectedFiles: event.target.files
       }); 
     }
+    // const fileReader = new FileReader();
+    // fileReader.onloadend = (e) => {
+    //   const img = e.result;
+    //   console.log(img);
+    //   // // Create a new image.
+    //   // var img = new Image();
+    //   // // Set the img src property using the data URL.
+    //   // img.src = reader.result;
+  
+    //   // // Add the image to the page.
+    //   // fileDisplayArea.appendChild(img);
+    // }
+    // console.log(event.target.files);
+    // fileReader.readAsDataURL(event.target.files);
+    // // fileReader.readAsDataURL(event.target.files[1]); 
+  }
+
+  readFile = (file) => {
+    const reader  = new FileReader();
+    reader.onloadend = (e) => {
+      console.log(e.target.result);
+    }
   }
 
   fileUploadHandler = async (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    event.nativeEvent.stopImmediatePropagation();
-    const fd = new FormData();
-    fd.append('image_1', this.state.selectedFiles[0], this.state.selectedFiles[0].name);
-    fd.append('image_2', this.state.selectedFiles[1], this.state.selectedFiles[1].name);
-    const response = await axios.post('server:4000/api/upload', fd);
-    
-    this.setState({
-      ...this.state,
-      result: response
-    });
+    console.log('fileUploadHandler');
+
+    if (this.state.selectedFiles[0]) {
+      const reader1  = new FileReader();
+      reader1.onloadend = (e) => {
+        console.log(e.target.result);
+        this.setState({
+          image1: e.target.result
+        });
+      }
+      reader1.readAsDataURL(this.state.selectedFiles[0]);
+    }
+
+    if (this.state.selectedFiles[1]) {
+      const reader2  = new FileReader();
+      reader2.onloadend = (e) => {
+        console.log(e.target.result);
+        this.setState({
+          image2: e.target.result
+        });
+      }
+      reader2.readAsDataURL(this.state.selectedFiles[1]);
+    }
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    console.log('componentDidUpdate');
+    const { image2 } = this.state; 
+    if (image2 !== prevState.image2) {
+      const body = {
+        image1: this.state.image1,
+        image2: this.state.image2
+      };
+      console.log(body);
+      const response = await axios.post('/api/openpiv', body);
+      console.log(`response: ${response}`);
+    }
+    // this.setState({
+    //   ...this.state,
+    //   result: response
+    // });
   }
 
   render() {
     const file_path = this.state.result;
-    console.log(file_path);
     return (
       <div className="fileUpload" >
         <input type="file" onChange={this.fileSelectedHandler} required multiple/>
