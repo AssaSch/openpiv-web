@@ -11,15 +11,12 @@ import base64
 
 def two_images(image_1, image_2):
 
-    local_dir = os.path.dirname(os.path.realpath(__file__))
-    newFile_1 = open('image_1.bmp', 'w+b')
-    newFileByteArray_1 = bytes(image_1)
-    newFile_1.write(newFileByteArray_1)
-    newFile_1.close()
-    newFile_2 = open('image_2.bmp', 'w+b')
-    newFileByteArray_2 = bytes(image_2)
-    newFile_2.write(newFileByteArray_2)
-    newFile_2.close()
+    with open("image_1.bmp", "wb") as fh1:
+        fh1.write(base64.b64decode(image_1))
+
+    with open("image_2.bmp", "wb") as fh2:
+        fh2.write(base64.b64decode(image_2))
+
     frame_a  = tools.imread( 'image_1.bmp' )
     frame_b  = tools.imread( 'image_2.bmp' )
     
@@ -37,24 +34,14 @@ def two_images(image_1, image_2):
     x, y, u, v = scaling.uniform(x, y, u, v, scaling_factor = 96.52 )
 
     file_name = 'result.txt'
+    if os.path.isfile(file_name):
+        os.remove(file_name)
     tools.save(x, y, u, v, np.zeros_like(u), file_name ) # no masking, all values are valid
 
-    a = np.loadtxt(file_name)
-    fig=plt.figure()
-    invalid = a[:,4].astype('bool')
-    fig.canvas.set_window_title('Vector field, '+str(np.count_nonzero(invalid))+' wrong vectors')
-    valid = ~invalid
-    plt.quiver(a[invalid,0],a[invalid,1],a[invalid,2],a[invalid,3],color='r')
-    plt.quiver(a[valid,0],a[valid,1],a[valid,2],a[valid,3],color='b')
-    plt.draw()
-
-    image_path = 'test_plot_1.jpg'
-    if os.path.isfile(image_path):    
-        os.remove(image_path)
-    plt.savefig(image_path)
-
  
-    with open(image_path, "rb") as imageFile:
-        string = base64.b64encode(imageFile.read())
+    with open(file_name, "rb") as resultFile:
+        file_reader = resultFile.read()
+        image_encode = base64.encodestring(file_reader)
+        base64_string = str(image_encode, 'utf-8')
     
-    return image_path
+    return base64_string

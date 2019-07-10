@@ -12,11 +12,8 @@ class Openpiv(Resource):
     
     def post(self):
         req_body = request.get_json()
-        print(req_body)
-        data = openpiv_handler.two_images(req_body['image_1']['data'],
-                req_body['image_2']['data'])
+        data = openpiv_handler.two_images(req_body['image1'], req_body['image2'])
         return data ,200
-
     
 api.add_resource(Openpiv, "/api/openpiv")
 
