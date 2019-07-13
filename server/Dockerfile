@@ -12,10 +12,13 @@ RUN apt-get install -y cython python-numpy python-scipy
 #RUN pip3 install --trusted-host pypi.python.org --trusted-host pypi.org --trusted-host files.pythonhosted.org numpy==1.14.3
 RUN apt-get install -y  python3.6
 RUN apt-get -y install python3-pip
+RUN apt-get -y install build-essential libssl-dev libffi-dev python3-dev
+RUN pip3 install --upgrade pip
 RUN pip3 install numpy
 RUN pip3 install openpiv
 RUN pip3 install flask
 RUN pip3 install flask_restful
+RUN pip3 install flask_cors
 #RUN git clone https://github.com/OpenPIV/openpiv-python.git
 
 #RUN cd openpiv-python && python setup.py install
