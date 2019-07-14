@@ -48,7 +48,7 @@ class fileUpload extends Component {
         image1: this.state.image1,
         image2: this.state.image2
       };
-      const response = await axios.post('/api/openpiv', body);
+      const response = await axios.post('http://34.77.33.26:4000/api/openpiv', body);
       const result = window.atob(response.data);
       fileDownload(result, 'result.txt');
     }

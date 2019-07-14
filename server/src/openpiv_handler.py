@@ -25,9 +25,9 @@ def two_images(image_1, image_2):
     overlap = 12 # pixels
     dt = 0.02 # sec
 
-    u, v, sig2noise = pyprocess.extended_search_area_piv( frame_a.astype(np.int32), frame_b.astype(np.int32), 
+    u, v, sig2noise = pyprocess.piv( frame_a.astype(np.int32), frame_b.astype(np.int32), 
                                                         window_size=winsize, overlap=overlap, dt=dt, 
-                                                        search_area_size=searchsize, sig2noise_method='peak2peak' )
+                                                        search_size=searchsize, sig2noise_method='peak2peak' )
     x, y = pyprocess.get_coordinates( image_size=frame_a.shape, window_size=searchsize, overlap=overlap )
     u, v, mask = validation.sig2noise_val( u, v, sig2noise, threshold = 1.3 )
     u, v = filters.replace_outliers( u, v, method='localmean', max_iter=10, kernel_size=2)

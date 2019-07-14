@@ -19,6 +19,7 @@ RUN pip3 install openpiv
 RUN pip3 install flask
 RUN pip3 install flask_restful
 RUN pip3 install flask_cors
+RUN pip3 install uwsgi
 #RUN git clone https://github.com/OpenPIV/openpiv-python.git
 
 #RUN cd openpiv-python && python setup.py install

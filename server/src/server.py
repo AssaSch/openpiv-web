@@ -17,4 +17,4 @@ class Openpiv(Resource):
     
 api.add_resource(Openpiv, "/api/openpiv")
 
-app.run(port=4000, debug=True)
+app.run(port=4000, debug=True, host='0.0.0.0')
